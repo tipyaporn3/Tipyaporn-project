@@ -1,0 +1,433 @@
+@import url('https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --pastel-pink-bg: #fff5f7;
+  --pastel-pink-primary: #ffb6c1;
+  --pastel-pink-dark: #ff8fa3;
+  --pastel-pink-card: #ffffff;
+  --text-color: #4a4a4a;
+  --border-color: #ffd1dc;
+}
+
+body {
+  font-family: 'Prompt', sans-serif;
+  background-color: var(--pastel-pink-bg);
+  color: var(--text-color);
+  margin: 0;
+  padding: 0;
+}
+
+header {
+  background-color: var(--pastel-pink-primary);
+  padding: 1rem 2rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+header h1 {
+  margin: 0;
+  color: #fff;
+  font-size: 1.5rem;
+}
+
+nav {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+nav a {
+  color: #fff;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+nav a:hover {
+  opacity: 0.8;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+.login-container {
+  max-width: 400px;
+  margin-top: 5rem;
+}
+
+.card {
+  background-color: var(--pastel-pink-card);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 4px 6px rgba(255, 182, 193, 0.15);
+  margin-bottom: 1.5rem;
+  text-align: left;
+  overflow-x: auto; /* 📌 ป้องกันเนื้อหาล้นการ์ดและให้เลื่อนดูได้ */
+}
+
+.card-center {
+  text-align: center;
+}
+
+.login-title {
+  color: #ff758c;
+  margin-bottom: 1.5rem;
+}
+
+button,
+.btn {
+  background-color: var(--pastel-pink-dark);
+  color: white;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  text-decoration: none;
+  display: inline-block;
+  width: 100%;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+button:hover,
+.btn:hover {
+  background-color: #ff758c;
+}
+
+.btn-logout {
+  width: auto;
+  padding: 0.4rem 0.8rem;
+  background-color: #ff758c;
+}
+
+input,
+select,
+textarea {
+  width: 100%;
+  padding: 0.6rem;
+  margin-top: 0.3rem;
+  margin-bottom: 1rem;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  box-sizing: border-box;
+  background-color: #fff9fa;
+}
+
+textarea {
+  resize: none;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+label {
+  font-weight: 600;
+  color: #666;
+}
+
+.alert-error {
+  background-color: #ffd1dc;
+  color: #a61c3c;
+  padding: 0.75rem;
+  border-radius: 6px;
+  margin-bottom: 1rem;
+  text-align: left;
+}
+
+.divider {
+  border: 0;
+  border-top: 1px solid var(--border-color);
+  margin: 1rem 0;
+}
+
+/* --- ตารางและฟอร์มสำหรับหน้าแจ้งซ่อม --- */
+.table-repair {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+  min-width: 900px; /* 📌 ล็อคขนาดขั้นต่ำของตารางเพื่อให้จัดเรียงสวยงาม */
+}
+
+.table-repair th {
+  border-bottom: 2px solid var(--border-color);
+  text-align: left;
+  padding: 0.75rem 0.5rem;
+  color: #666;
+  white-space: nowrap;
+  font-size: 0.9rem;
+}
+
+.table-repair td {
+  border-bottom: 1px solid var(--border-color);
+  padding: 0.75rem 0.5rem;
+  vertical-align: middle;
+  font-size: 0.9rem;
+}
+
+/* 📌 ควบคุมความกว้างและตัดคำคอลัมน์รายละเอียด */
+.table-repair td:nth-child(4) {
+  min-width: 200px;
+  max-width: 280px;
+  word-break: break-word;
+  white-space: normal;
+}
+
+/* 📌 จัดฟอร์มเปลี่ยนสถานะในตารางให้กระชับ ไม่ดันล้น */
+.status-form {
+  display: flex;
+  gap: 0.3rem;
+  align-items: center;
+  margin: 0;
+  white-space: nowrap;
+}
+
+.status-select {
+  margin: 0 !important;
+  padding: 0.3rem 0.4rem !important;
+  font-size: 0.8rem;
+  width: auto !important;
+}
+
+.btn-update-status {
+  width: auto !important;
+  padding: 0.3rem 0.6rem !important;
+  font-size: 0.8rem;
+  margin: 0 !important;
+  white-space: nowrap;
+}
+
+/* 📌 ป้ายสถานะและวันที่ */
+.badge-status {
+  background-color: #ffd1dc;
+  color: #a61c3c;
+  padding: 0.4rem 0.8rem;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  display: inline-block;
+  white-space: nowrap;
+  text-align: center;
+}
+
+.table-repair td:nth-child(7) {
+  white-space: nowrap;
+}
+
+/* --- สไตล์ป้าย Badge สำหรับแสดง Role ในตาราง ACL --- */
+.badge-role {
+  background-color: #ffd1dc;
+  color: #a61c3c;
+  padding: 0.3rem 0.7rem;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  display: inline-block;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.text-empty {
+  color: #777;
+  text-align: center;
+  margin-top: 1rem;
+}
+
+.form-group-margin {
+  margin-top: 0.5rem;
+}
+
+.form-inline-group {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  margin: 0;
+}
+
+.select-role {
+  margin: 0 !important;
+  width: auto !important;
+  padding: 0.4rem 0.6rem !important;
+}
+
+.form-inline-group button,
+.btn-update {
+  width: auto !important;
+  padding: 0.4rem 0.8rem !important;
+  margin: 0 !important;
+}
+
+.btn-sm {
+  width: auto;
+  padding: 0.4rem 0.8rem;
+}
+
+.nav-link-custom {
+  color: #fff;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.nav-link-custom:hover {
+  opacity: 0.8;
+}
+
+.card form label {
+  display: block;
+  text-align: left;
+  margin-bottom: 0.3rem;
+}
+
+/* --- สไตล์สำหรับฟอร์มกรอง Logs --- */
+.filter-form {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.filter-input,
+.filter-select {
+  padding: 8px 12px;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  font-family: 'Prompt', sans-serif;
+  font-size: 0.95rem;
+  background-color: #fff9fa;
+  width: auto;
+  margin: 0;
+}
+
+.filter-input:focus,
+.filter-select:focus {
+  border-color: #ff8fa3;
+  outline: none;
+  box-shadow: 0 0 5px rgba(255, 183, 193, 0.4);
+}
+
+.btn-filter-search {
+  background-color: var(--pastel-pink-dark);
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-family: 'Prompt', sans-serif;
+  font-weight: bold;
+  color: white;
+  width: auto;
+  margin: 0;
+  transition: background-color 0.2s;
+}
+
+.btn-filter-search:hover {
+  background-color: #ff758c;
+}
+
+.filter-reset {
+  text-decoration: none;
+  color: #666;
+  font-size: 0.9rem;
+  margin-left: 5px;
+}
+
+.filter-reset:hover {
+  text-decoration: underline;
+  color: #333;
+}
+
+.no-data {
+  text-align: center;
+  padding: 20px;
+  color: #888;
+}
+
+.ticket-thumbnail {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 6px;
+  border: 1px solid #ffb6c1;
+  display: block;
+}
+
+.text-no-image {
+  width: 60px;
+  height: 60px;
+  border-radius: 6px;
+  border: 1px solid #ffb6c1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #aaa;
+  font-size: 12px;
+  text-align: center;
+}
+
+/* --- Modal Error Popup Styles --- */
+.modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1050;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-overlay.show {
+    display: flex;
+}
+
+.modal-card {
+    background: white;
+    padding: 25px;
+    border-radius: 8px;
+    width: 400px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.modal-header-custom {
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+}
+
+.modal-title-custom {
+    color: #d9534f;
+    margin: 0;
+    font-size: 18px;
+}
+
+.modal-body-custom {
+    margin-bottom: 20px;
+}
+
+.modal-body-custom p {
+    margin: 0;
+    font-size: 16px;
+    color: #333;
+}
+
+.modal-footer-custom {
+    text-align: right;
+}
+
+.btn-close-modal {
+    background: #6c757d;
+    color: white;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.btn-close-modal:hover {
+    background: #5a6268;
+}

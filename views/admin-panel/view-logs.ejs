@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <title>ประวัติกิจกรรมระบบ - ระบบแจ้งซ่อม</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+    <header>
+        <h1>🌸 ประวัติการใช้งานระบบ (Activity Logs)</h1>
+        <nav>
+            <a href="/dashboard">กลับหน้าแดชบอร์ด</a>
+            <a href="/logout" class="btn btn-logout">ออกจากระบบ</a>
+        </nav>
+    </header>
+
+    <div class="container">
+        <div class="card">
+            <h2>📜 บันทึกกิจกรรมย้อนหลัง (Audit Logs)</h2>
+            <hr class="divider">
+
+            <!-- ฟอร์มค้นหาและกรองข้อมูล ใช้ CSS Class ทั้งหมด -->
+            <form method="GET" action="/admin/logs" class="filter-form">
+                <input type="text" name="username" class="filter-input" placeholder="ค้นหาชื่อผู้ใช้..."
+                    value="<%= filterUsername %>">
+
+                <select name="action" class="filter-select">
+                    <option value="">-- ทุกประเภทเหตุการณ์ --</option>
+                    <!-- ถ้าใช้แบบดึงค่า Action ทั้งหมดที่มีในฐานข้อมูลมาแสดงอัตโนมัติ (แนะนำ) -->
+                    <% actions.forEach(act=> { %>
+                        <option value="<%= act.action %>" <%=filterAction===act.action ? 'selected' : '' %>>
+                            <%= act.action %>
+                        </option>
+                        <% }) %>
+                </select>
+
+                <button type="submit" class="btn-filter-search">🔍 ค้นหา</button>
+                <a href="/admin/logs" class="filter-reset">ล้างตัวกรอง</a>
+            </form>
+
+            <table class="table-repair">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>ผู้ใช้งาน</th>
+                        <th>การกระทำ (Action)</th>
+                        <th>เป้าหมาย (Target)</th>
+                        <th>สถานะ</th>
+                        <th>เวลา</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% if (logs && logs.length> 0) { %>
+                        <% logs.forEach(log=> { %>
+                            <tr>
+                                <td>
+                                    <%= log.id %>
+                                </td>
+                                <td>
+                                    <%= log.username || 'System/Guest' %>
+                                </td>
+                                <td><strong>
+                                        <%= log.action %>
+                                    </strong></td>
+                                <td>
+                                    <%= log.target_resource %>
+                                </td>
+                                <td><span class="badge-status">
+                                        <%= log.status %>
+                                    </span></td>
+                                <td>
+                                    <%= new Date(log.timestamp).toLocaleString('th-TH') %>
+                                </td>
+                            </tr>
+                            <% }) %>
+                                <% } else { %>
+                                    <tr>
+                                        <td colspan="6" class="no-data">ไม่พบข้อมูลประวัติการใช้งานตามเงื่อนไข</td>
+                                    </tr>
+                                    <% } %>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+
+</html>

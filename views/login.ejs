@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <title>เข้าสู่ระบบ - ระบบแจ้งซ่อม</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <div class="container login-container">
+        <div class="card card-center">
+            <h2 class="login-title">🌸 เข้าสู่ระบบแจ้งซ่อม</h2>
+            
+            <% if (locals.error && error) { %>
+                <div class="alert-error">
+                    <%= error %>
+                </div>
+            <% } %>
+
+            <form action="/login" method="POST">
+                <label>ชื่อผู้ใช้งาน:</label>
+                <input type="text" name="username" required placeholder="กรอกชื่อผู้ใช้...">
+
+                <label>รหัสผ่าน:</label>
+                <input type="password" name="password" required placeholder="กรอกรหัสผ่าน...">
+
+                <button type="submit" style="margin-top: 1rem;">เข้าสู่ระบบ</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

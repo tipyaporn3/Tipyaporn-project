@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <title>จัดการผู้ใช้งานและสิทธิ์การเข้าถึง (ACL) - ระบบแจ้งซ่อม</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+    <header>
+        <h1>🌸 ระบบจัดการสิทธิ์ผู้ใช้งานและการเข้าถึง (Admin Panel)</h1>
+        <nav>
+            <a href="/dashboard">กลับหน้าแดชบอร์ด</a>
+            <a href="/logout" class="btn btn-logout">ออกจากระบบ</a>
+        </nav>
+    </header>
+
+    <div class="container">
+
+        <!-- 📌 ส่วนใหม่: ฟอร์มเพิ่มบทบาทสิทธิ์ (Role) ใหม่ -->
+        <div class="card">
+            <h2>🏷️ เพิ่มบทบาทสิทธิ์ใหม่ (Role)</h2>
+            <hr class="divider">
+            <form action="/admin/acl/add-role" method="POST" class="filter-form">
+                <input type="text" name="role_name" placeholder="ชื่อบทบาทใหม่..." class="filter-input" required>
+                <button type="submit" class="btn-filter-search" style="background-color: #4CAF50;">เพิ่ม Role</button>
+            </form>
+        </div>
+
+        <!-- 📌 ส่วนที่ 1: ฟอร์มเพิ่มผู้ใช้งานใหม่ -->
+        <div class="card">
+            <h2>➕ เพิ่มผู้ใช้งานใหม่</h2>
+            <hr class="divider">
+            <form action="/admin/acl/add-user" method="POST" class="filter-form">
+                <input type="text" name="username" placeholder="ชื่อผู้ใช้งาน (Username)" class="filter-input" required>
+                <input type="password" name="password" placeholder="รหัสผ่าน (Password)" class="filter-input" required>
+                <select name="role_id" class="filter-select" required>
+                    <option value="" disabled selected>-- เลือกบทบาทสิทธิ์ --</option>
+                    <% roles.forEach(role=> { %>
+                        <option value="<%= role.id %>">
+                            <%= role.name %>
+                        </option>
+                        <% }) %>
+                </select>
+                <button type="submit" class="btn-filter-search">เพิ่มผู้ใช้</button>
+            </form>
+        </div>
+
+        <!-- 📌 ส่วนที่ 2: ตารางรายชื่อผู้ใช้งานและการจัดการสิทธิ์ -->
+        <div class="card">
+            <h2>👥 รายชื่อผู้ใช้งานทั้งหมด</h2>
+            <hr class="divider">
+            <table class="table-repair">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>ชื่อผู้ใช้งาน</th>
+                        <th>บทบาทปัจจุบัน (Role)</th>
+                        <th>เปลี่ยนบทบาทสิทธิ์</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% users.forEach(user=> { %>
+                        <tr>
+                            <td>
+                                <%= user.id %>
+                            </td>
+                            <td>
+                                <%= user.username %>
+                            </td>
+                            <td>
+                                <span class="badge-role">
+                                    <%= user.role_name %>
+                                </span>
+                            </td>
+                            <td>
+                                <div class="form-inline-group">
+                                    <form action="/admin/acl/update-role/<%= user.id %>" method="POST"
+                                        class="form-inline-group">
+                                        <select name="role_id" class="select-role">
+                                            <% roles.forEach(role=> { %>
+                                                <option value="<%= role.id %>" <%=Number(user.role_id)===Number(role.id)
+                                                    ? 'selected' : '' %>>
+                                                    <%= role.name %>
+                                                </option>
+                                                <% }) %>
+                                        </select>
+                                        <button type="submit" class="btn-update">บันทึก</button>
+                                    </form>
+
+                                    <form action="/admin/acl/delete-user/<%= user.id %>" method="POST"
+                                        onsubmit="return confirm('คุณแน่ใจหรือไม่ว่าต้องการลบผู้ใช้งาน <%= user.username %> ?');"
+                                        class="form-delete-inline">
+                                        <button type="submit" class="btn btn-danger-custom">ลบ</button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                        <% }) %>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+
+</html>

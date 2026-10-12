@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <title>ระบบแจ้งซ่อม</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+    <header>
+        <h1>🌸 ระบบแจ้งซ่อมบำรุง</h1>
+        <nav>
+            <span>ผู้ใช้งาน: <%= user.username %> (<%= user.role_name %>)</span>
+            <% if (user.role_name === 'Admin') { %>
+                <a href="/admin/acl" class="nav-link-custom">จัดการสิทธิ์ ACL</a>
+                <a href="/admin/logs" class="nav-link-custom">ดู Logs</a>
+
+            <% } else if (user.role_name === 'Manager') { %>
+                <a href="/manager/logs" class="nav-link-custom">ดู Logs</a>
+            <% } %>
+            <a href="/logout" class="btn btn-logout">ออกจากระบบ</a>
+        </nav>
+    </header>
+
+    <div class="container">
+        <!-- 📌 ส่วนที่ 1: ฟอร์มแจ้งซ่อม -->
+        <% if (user.role_name === 'User' || user.role_name === 'Admin') { %>
+            <div class="card">
+                <h2>📝 แจ้งซ่อมอุปกรณ์ใหม่</h2>
+                <form action="/repair/create" method="POST" enctype="multipart/form-data">
+                    <label>หัวข้อปัญหา / อุปกรณ์ที่ชำรุด:</label>
+                    <input type="text" name="title" required placeholder="เช่น แอร์ห้องประชุมไม่เย็น, ปริ้นเตอร์พัง..." >
+
+                    <label>รายละเอียดอาการ:</label>
+                    <textarea name="description" rows="4" required placeholder="อธิบายอาการเสียเบื้องต้น..."></textarea>
+
+                    <label>แนบรูปภาพอุปกรณ์ (ถ้ามี):</label>
+                    <input type="file" name="image" accept="image/*">
+
+                    <button type="submit" class="btn form-group-margin">ส่งเรื่องแจ้งซ่อม</button>
+                </form>
+            </div>
+        <% } %>
+
+        <!-- 📌 ส่วนที่ 2: แสดงรายการแจ้งซ่อมทั้งหมด -->
+        <div class="card">
+            <h2>📋 รายการแจ้งซ่อมทั้งหมดในระบบ</h2>
+            <hr class="divider">
+
+            <% if (locals.tickets && tickets.length > 0) { %>
+                <table class="table-repair">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>ผู้แจ้ง</th>
+                            <th>หัวข้อ</th>
+                            <th>รายละเอียด</th>
+                            <th>รูปภาพแนบ</th>
+                            <th>สถานะ</th>
+                            <th>วันที่แจ้ง</th>
+                            <% if (user.role_name === 'Admin' || user.role_name === 'User') { %>
+                                <th>จัดการ</th>
+                            <% } %>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% tickets.forEach(ticket => { %>
+                            <tr>
+                                <td><%= ticket.id %></td>
+                                <td><%= ticket.username %></td>
+                                <td><%= ticket.title %></td>
+                                <td><%= ticket.description %></td>
+                                <td>
+                                    <% if (ticket.file_name) { %>
+                                        <a href="/uploads/<%= ticket.file_name %>" target="_blank">
+                                            <img src="/uploads/<%= ticket.file_name %>" alt="รูปแนบ" class="ticket-thumbnail">
+                                        </a>
+                                    <% } else { %>
+                                        <span class="text-no-image">ไม่มีรูป</span>
+                                    <% } %>
+                                </td>
+                                <td>
+                                    <% const role = user.role_name ? user.role_name.toLowerCase() : ''; %>
+                                    <% if (role === 'admin' || role === 'staff') { %>
+                                        <form action="/repair/update-status/<%= ticket.id %>" method="POST" class="status-form">
+                                            <select name="status" class="status-select">
+                                                <option value="รอดำเนินการ" <%= ticket.status === 'รอดำเนินการ' ? 'selected' : '' %>>รอดำเนินการ</option>
+                                                <option value="กำลังดำเนินการ" <%= ticket.status === 'กำลังดำเนินการ' ? 'selected' : '' %>>กำลังดำเนินการ</option>
+                                                <option value="เสร็จสิ้น" <%= ticket.status === 'เสร็จสิ้น' ? 'selected' : '' %>>เสร็จสิ้น</option>
+                                                <option value="ยกเลิก" <%= ticket.status === 'ยกเลิก' ? 'selected' : '' %>>ยกเลิก</option>
+                                            </select>
+                                            <button type="submit" class="btn-update-status">อัปเดต</button>
+                                        </form>
+                                    <% } else { %>
+                                        <span class="badge-status"><%= ticket.status %></span>
+                                    <% } %>
+                                </td>
+                                <td><%= new Date(ticket.created_at).toLocaleString('th-TH') %></td>
+
+                                <% if (user.role_name === 'Admin' || ticket.username === user.username) { %>
+                                    <td>
+                                        <form action="/repair/delete/<%= ticket.id %>" method="POST" onsubmit="return confirm('คุณต้องการลบรายการนี้และไฟล์รูปภาพใช่หรือไม่?');">
+                                            <button type="submit" class="btn btn-logout">ลบ</button>
+                                        </form>
+                                    </td>
+                                <% } else if (user.role_name === 'User') { %>
+                                    <td></td>
+                                <% } %>
+                            </tr>
+                        <% }) %>
+                    </tbody>
+                </table>
+            <% } else { %>
+                <p class="text-empty">ยังไม่มีรายการแจ้งซ่อมในระบบ</p>
+            <% } %>
+        </div>
+    </div>
+
+    <!-- 📌 Modal แจ้งเตือนข้อผิดพลาด -->
+    <div class="modal-overlay <%= (typeof error !== 'undefined' && error) ? 'show' : '' %>" id="uploadErrorModal">
+        <div class="modal-card">
+            <div class="modal-header-custom">
+                <h5 class="modal-title-custom">⚠️ แจ้งเตือนข้อผิดพลาด</h5>
+            </div>
+            <div class="modal-body-custom">
+                <p><%= typeof error !== 'undefined' ? error : '' %></p>
+            </div>
+            <div class="modal-footer-custom">
+                <button type="button" class="btn-close-modal" onclick="window.location.href='/dashboard';">ปิด</button>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
